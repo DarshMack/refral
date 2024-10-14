@@ -5,6 +5,7 @@ import {
   updateUser,
 } from "../models/userqueries.js";
 import { calculateReferralPoints } from "../../config/common.js";
+import redisClient from "../../config/redis.js";
 
 export const saveUserData = async (req, res) => {
   try {
@@ -17,6 +18,9 @@ export const saveUserData = async (req, res) => {
     req.body.referrerCode = referrerCode;
 
     const result = await addUser(req.body);
+    await redisClient.set(`result:${result.insertId}`, result.jwtToken);
+
+    // await redisClient.set(`user:${userId}`, username);
   } catch (error) {
     res.send(error.sqlMessage);
   }
