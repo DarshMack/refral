@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 09, 2024 at 09:49 AM
+-- Generation Time: Oct 15, 2024 at 08:38 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -29,12 +29,12 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `tbl_user` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `mobile` varchar(15) NOT NULL,
-  `referralCode` varchar(50) DEFAULT NULL,
+  `name` varchar(64) NOT NULL,
+  `mobile` varchar(16) NOT NULL,
+  `referralCode` varchar(16) NOT NULL,
   `gender` enum('Male','Female') NOT NULL,
   `technology` text DEFAULT NULL,
-  `profilePic` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `profilePic` text DEFAULT NULL,
   `dob` date DEFAULT NULL,
   `points` decimal(10,0) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
@@ -50,8 +50,7 @@ CREATE TABLE `tbl_user` (
 -- Indexes for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `mobile` (`mobile`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables

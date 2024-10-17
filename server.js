@@ -7,6 +7,8 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import userRoutes from "./module/routes/userroutes.js";
+import connection from "./config/database.js";
+
 import {
   saveUserData,
   fetchReferralUsers,
@@ -67,6 +69,15 @@ if (cluster.isMaster) {
       console.log(error);
       res.status(500).json({ error: error });
     }
+  });
+
+  // Route to fetch all users' data
+  app.get("/users", (req, res) => {
+    const sql = "SELECT * FROM tbl_user";
+    connection.query(sql, (err, results) => {
+      if (err) return res.status(500).send("Error fetching data");
+      res.json(results);
+    });
   });
 
   app.listen(process.env.PORT || 3000, () => {

@@ -45,5 +45,63 @@
 
       <input type="submit" value="Submit" />
     </form>
+    <h2>Submitted Data</h2>
+    <button onclick="fetchData()">Show Submitted Data</button>
+    <table border="1" id="dataTable" style="margin-top: 20px">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Mobile</th>
+          <th>Referral Code</th>
+          <th>Gender</th>
+          <th>Technology</th>
+          <th>Profile Pics</th>
+          <th>DOB</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <script>
+      function formatDate(isoDate) {
+        const date = new Date(isoDate);
+        const day = String(date.getDate()).padStart(2, "0"); // Ensure 2 digits
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+      }
+      // Fetch data from the server and display it in the table
+      async function fetchData() {
+        const response = await fetch("/users");
+        const data = await response.json();
+        const tableBody = document.querySelector("#dataTable tbody");
+        tableBody.innerHTML = ""; // Clear old data
+
+        data.forEach((user) => {
+          const profilePicsArray = JSON.parse(user.profilePic);
+
+          const profilePics = profilePicsArray
+            .map(
+              (pic) =>
+                `<img src="http://localhost/project/referralUserSystem/refral/uploads/${pic}" alt="Profile Pic" width="50" height="50" style="margin: 5px;">`
+            )
+            .join("");
+          const formattedDob = formatDate(user.dob);
+          const row = `
+                  <tr>
+                      <td>${user.id}</td>
+                      <td>${user.name}</td>
+                      <td>${user.mobile}</td>
+                      <td>${user.referralCode}</td>
+                      <td>${user.gender}</td>
+                      <td>${user.technology}</td>
+                      <td>${profilePics}</td>
+                      <td>${formattedDob}</td>
+                  </tr>
+              `;
+          tableBody.innerHTML += row;
+        });
+      }
+    </script>
   </body>
 </html>
